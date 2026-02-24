@@ -1,3 +1,4 @@
+import iceServers from "@/data/ice";
 import { useRef, useState } from "react";
 
 export const useVideoWebRTC = () => {
@@ -6,7 +7,7 @@ export const useVideoWebRTC = () => {
             urls: process.env.NEXT_PUBLIC_TURN_SERVER_URL || "",
             username: process.env.NEXT_PUBLIC_TURN_SERVER_USER || "",
             credential: process.env.NEXT_PUBLIC_TURN_SERVER_PASSWORD || "",
-        }],
+        }, ...iceServers],
         iceTransportPolicy: "relay",
     }
 

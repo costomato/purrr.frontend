@@ -1,13 +1,17 @@
 export default function Footer() {
     return (
-        <footer>
-            <div className="max-w-[90vw] m-auto flex justify-between">
-                <div className=""></div>
-                <div className="">
+        <footer className="">
+            <div className="">
+                <div className="max-w-[90vw] m-auto flex justify-between">
+                    <div className=""></div>
                     <div className="">
-                        {/* <Image className="w-auto h-auto dark:hidden" src="/logo-light.png" width="100" height="100" alt="purrr.chat Logo" />
-                        <Image className="w-auto h-auto light:hidden" src="/logo.png" width={100} height={100} alt="Purrr.chat"/> */}
                     </div>
+                </div>
+            </div>
+            <div className="py-4 px-8 flex justify-between">
+                <div className="">Purrr chat - Your Conversations, Your way</div>
+                <div className="">
+                    <span>An Open Source Project</span>
                 </div>
             </div>
         </footer>

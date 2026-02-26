@@ -3,11 +3,13 @@ import { useRef, useState } from "react";
 
 export const useVideoWebRTC = () => {
     const servers: RTCConfiguration = {
-        iceServers: [{
-            urls: process.env.NEXT_PUBLIC_TURN_SERVER_URL || "",
-            username: process.env.NEXT_PUBLIC_TURN_SERVER_USER || "",
-            credential: process.env.NEXT_PUBLIC_TURN_SERVER_PASSWORD || "",
-        }, ...iceServers],
+        iceServers: [
+            //     {
+            //     urls: process.env.NEXT_PUBLIC_TURN_SERVER_URL || "",
+            //     username: process.env.NEXT_PUBLIC_TURN_SERVER_USER || "",
+            //     credential: process.env.NEXT_PUBLIC_TURN_SERVER_PASSWORD || "",
+            // },
+            ...iceServers],
         iceTransportPolicy: "relay",
     }
 
@@ -27,7 +29,7 @@ export const useVideoWebRTC = () => {
     }
 
     const destroy = () => {
-        if(localStream) {
+        if (localStream) {
             localStream?.getTracks().forEach(track => track.stop());
             setLocalStream(null);
         }
@@ -39,13 +41,13 @@ export const useVideoWebRTC = () => {
         const newRemoteStream = new MediaStream();
         setRemoteStream(newRemoteStream);
 
-        if(stream) {
+        if (stream) {
             stream.getTracks().forEach(track => {
                 peerConnection.current?.addTrack(track, stream);
             })
         }
 
-        if(peerConnection.current) {
+        if (peerConnection.current) {
             peerConnection.current.ontrack = async (event) => {
                 event.streams[0].getTracks().forEach(track => {
                     newRemoteStream.addTrack(track);
@@ -54,7 +56,7 @@ export const useVideoWebRTC = () => {
         }
 
         peerConnection.current.oniceconnectionstatechange = () => {
-            if(peerConnection.current) {
+            if (peerConnection.current) {
                 console.log('ICE state: ', peerConnection.current.iceConnectionState);
             }
         };
@@ -74,7 +76,7 @@ export const useVideoWebRTC = () => {
         await peerConnection.current?.setLocalDescription(offer);
     }
 
-    const createAnswer = async (offer: RTCSessionDescriptionInit | null ,callback: (value: RTCSessionDescriptionInit | null) => void) => {
+    const createAnswer = async (offer: RTCSessionDescriptionInit | null, callback: (value: RTCSessionDescriptionInit | null) => void) => {
         const stream = await init();
         createPeerConnection(stream, callback);
 
@@ -85,7 +87,7 @@ export const useVideoWebRTC = () => {
         const answer = await peerConnection.current?.createAnswer();
         await peerConnection.current?.setLocalDescription(answer);
     }
-    
+
     const addAnswer = async (answer: RTCSessionDescriptionInit | null) => {
         if (!answer) return alert('NO ANSWER');
 
@@ -98,7 +100,7 @@ export const useVideoWebRTC = () => {
     }
 
     const disconnect = () => {
-        if(peerConnection.current) {
+        if (peerConnection.current) {
             peerConnection.current.close();
             setRemoteStream(null);
             setConnected(false);

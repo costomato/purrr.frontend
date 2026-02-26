@@ -1,5 +1,5 @@
 import ReplyIcon from "@/assets/icons/reply";
-import { Message } from "@/types/messages"
+import { Message } from "@/types/messages";
 import { setEmojiSize, truncate } from "@/utils";
 import Image from "next/image";
 import { RefObject } from "react";
@@ -11,50 +11,81 @@ type ChatDisplayProps = {
     partner: string;
     readIndex: number | null;
     chatBottom: RefObject<HTMLDivElement>;
+    myAvatar: string;
+    partnerAvatar: string;
 }
 
-export function ChatDisplay({chatHeightOffset, messages, replyTo, partner, readIndex, chatBottom}: ChatDisplayProps) {
+export function ChatDisplay({ chatHeightOffset, messages, replyTo, partner, readIndex, chatBottom, myAvatar, partnerAvatar }: ChatDisplayProps) {
     return (
         <div className="flex flex-col justify-end max-w-full min-h-full pt-[5em]" style={{
             paddingBottom: chatHeightOffset + "px",
         }}>
-            {messages.map((message, i) => (
-                (message.body || message.image) &&
-                <div key={i} className="group flex flex-col px-4" style={{
-                    alignItems: message.from === "You" ? "end" : "start"
-                }}>
-                    {(i === 0 || message.from !== messages[i - 1].from) &&
-                        <h5 className="text-[0.8em] pt-4">{message.from}</h5>}
-                    {message.reply !== null &&
-                        <div className="flex flex-col border-foreground px-2" style={{
-                            alignItems: message.from === "You" ? "end" : "start",
-                            borderRightWidth: message.from === "You" ? "3px" : "0",
-                            borderLeftWidth: message.from === "You" ? "0" : "3px",
-                        }}>
-                            <h3 className="text-[0.7em]">Replying to {messages[message.reply].from}</h3>
-                            <p className="text-[0.8em]">{messages[message.reply].image && "(Attachment)"}{truncate(messages[message.reply].body)}</p>
-                        </div>}
-                    {message.image &&
-                        <div className="flex items-center gap-4" style={{ flexDirection: message.from === "You" ? "row-reverse" : "row" }}>
-                            <Image src={decodeURIComponent(message.image)} alt="Image" width="0" height="0" sizes="100vw" className="w-[10em] h-auto max-h-[20em]" />
-                            <div className="hidden group-hover:flex items-center gap-2">
-                                <button onClick={() => replyTo(i)}><ReplyIcon width="18" /></button>
-                                {/* <button><MenuIcon width="20" /></button> */}
+            {messages.map((message, i) => {
+                const isMe = message.from === "You";
+                const showHeader = i === 0 || message.from !== messages[i - 1].from;
+                const hasContent = message.body || message.image;
+
+                if (!hasContent) return null;
+
+                const hasText = message.body && message.body.trim() !== "";
+                const isEmojiOnly = hasText && setEmojiSize(message.body || "") !== "1em";
+                const isMediaOnly = message.image && !hasText;
+                const noBubble = isMediaOnly || isEmojiOnly;
+
+                return (
+                    <div key={i} className={`group flex w-full ${isMe ? "justify-end" : "justify-start"} mb-2 px-4 ${showHeader ? "mt-4" : ""}`}>
+                        {/* Avatar for partner */}
+                        {!isMe && (
+                            <div className="w-12 rounded-[5px] overflow-hidden m-2 shrink-0 flex-none mt-1">
+                                {showHeader ? (
+                                    <Image className="object-cover w-full h-12 " src={partnerAvatar} alt="avatar" width={50} height={50} />
+                                ) : (
+                                    <div className="w-full h-full" />
+                                )}
                             </div>
-                        </div>}
-                    {message.body && message.body.trim() !== "" &&
-                        <div className="flex items-center gap-4" style={{ flexDirection: message.from === "You" ? "row-reverse" : "row" }}>
-                            <h3 className="max-w-[70vw] break-words whitespace-pre-line" style={{ fontSize: setEmojiSize(message.body) }}>{message.body}</h3>
-                            {!message.image && <div className="hidden group-hover:flex items-center gap-2">
-                                <button onClick={() => replyTo(i)}><ReplyIcon width="18" /></button>
-                                {/* <button><MenuIcon width="20" /></button> */}
-                            </div>}
-                        </div>}
-                    {i === readIndex && (message.from === "You" ?
-                        <p className="text-[0.7em] self-end">Read by {partner}</p> :
-                        <div className="h-[1em]" />)}
-                </div>
-            ))}
+                        )}
+
+                        <div className={`flex flex-col ${isMe ? "items-end" : "items-start"} max-w-[70%]`}>
+                            {showHeader && (
+                                <h5 className={`text-[0.75em] text-gray-300 mb-1 ${isMe ? "mr-1" : "ml-1"}`}>{message.from}</h5>
+                            )}
+
+                            {message.reply !== null && (
+                                <div className="flex flex-col px-3 py-1 mb-1 rounded-md bg-white/5 border-l-2 border-white/20" style={{
+                                    alignItems: isMe ? "end" : "start",
+                                    borderRightWidth: isMe ? "2px" : "0",
+                                    borderLeftWidth: isMe ? "0" : "2px",
+                                }}>
+                                    <h3 className="text-[0.7em] text-gray-400">Replying to {messages[message.reply].from}</h3>
+                                    <p className="text-[0.8em] text-gray-300">{messages[message.reply].image && "(Attachment) "}{truncate(messages[message.reply].body)}</p>
+                                </div>
+                            )}
+
+                            <div className={`flex items-end gap-2 ${isMe ? "flex-row-reverse" : "flex-row"}`}>
+                                <div className={`${noBubble ? "" : `px-3 py-1 ${isMe ? "bg-[#b026ff]" : "bg-[#18181b] border border-white/10"} text-white rounded-[0.6rem]`}`}>
+                                    {message.image && (
+                                        <Image src={decodeURIComponent(message.image)} alt="Image" width={300} height={300} className={`w-[10em] h-auto max-h-[20em] rounded-lg ${hasText ? "mb-2" : ""}`} />
+                                    )}
+                                    {hasText && (
+                                        <h3 className="break-words whitespace-pre-line leading-relaxed" style={{ fontSize: setEmojiSize(message.body || "") }}>
+                                            {message.body}
+                                        </h3>
+                                    )}
+                                </div>
+                                <div className="hidden group-hover:flex items-center gap-2 mb-1">
+                                    <button onClick={() => replyTo(i)} className="text-gray-400 hover:text-white transition-colors">
+                                        <ReplyIcon width="16" />
+                                    </button>
+                                </div>
+                            </div>
+
+                            {i === readIndex && (isMe ?
+                                <p className="text-[0.65em] text-gray-400 mt-1">Read by {partner}</p> :
+                                <div className="h-[1em]" />)}
+                        </div>
+                    </div>
+                );
+            })}
             <div ref={chatBottom}></div>
         </div>
     )

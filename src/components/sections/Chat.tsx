@@ -7,7 +7,7 @@ import MenuIcon from "@/assets/icons/menu";
 import ChatIcon from "@/assets/icons/chat";
 import PhoneIcon from "@/assets/icons/phone";
 import { Message } from "@/types/messages";
-import { ChangeEvent, FormEvent, KeyboardEventHandler, useCallback, useEffect, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, KeyboardEventHandler, useCallback, useEffect, useRef, useState, useMemo } from "react";
 import ChatInput from "../resusable/ChatInput";
 import { ChatDisplay } from "../resusable/ChatDisplay";
 import MirrorIcon from "@/assets/icons/mirror";
@@ -34,6 +34,28 @@ type ChatProps = {
     acceptIncomingVideoCall: () => void,
     hangOngoingVideoCal: () => void,
 }
+
+const AVATARS = [
+    "/avatars/avatar-2025-01-29_19-55-09_9293.png",
+    "/avatars/avatar-2025-01-29_19-57-25_9624.png",
+    "/avatars/avatar-2025-01-29_20-06-04_1582.png",
+    "/avatars/avatar-2025-01-29_20-07-44_9715.png",
+    "/avatars/avatar-2025-01-29_20-09-48_1425.png",
+    "/avatars/avatar-2025-01-29_20-11-27_5785.png",
+    "/avatars/avatar-2025-01-29_20-11-57_4119.png",
+    "/avatars/avatar-2025-01-29_20-13-05_7738.png",
+    "/avatars/avatar-2025-01-29_20-14-50_7048.png",
+    "/avatars/avatar-2025-01-29_20-15-21_1293.png",
+    "/avatars/avatar-2025-01-29_20-16-26_4740.png",
+    "/avatars/avatar-2025-01-29_20-17-25_7209.png",
+    "/avatars/avatar-2025-01-29_20-17-55_7935.png",
+    "/avatars/avatar-2025-01-29_20-18-25_6511.png",
+    "/avatars/avatar-2025-01-29_20-22-13_7355.png",
+    "/avatars/avatar-2025-01-29_20-23-42_8590.png",
+    "/avatars/avatar-2025-01-29_20-34-44_4524.png",
+    "/avatars/avatar-2025-01-29_20-36-51_4540.png",
+    "/avatars/avatar-2025-01-29_20-53-30_6661.png"
+];
 
 export default function Chat({
     partner, messages, readIndex, partnerTyping, videoIncoming, videoShow, onMessage, onStop,
@@ -259,7 +281,15 @@ export default function Chat({
     }, [localStream, audioTrackEnabled])
 
     const [videoFlipped, setVideoFlipped] = useState<boolean>(true);
-    const AVATAR = "/avatars/avatar-2025-01-29_19-55-09_9293.png";
+    const partnerAvatar = useMemo(() => {
+        if (typeof window !== "undefined") return AVATARS[Math.floor(Math.random() * AVATARS.length)];
+        return AVATARS[0];
+    }, []);
+
+    const myAvatar = useMemo(() => {
+        if (typeof window !== "undefined") return AVATARS[Math.floor(Math.random() * AVATARS.length)];
+        return AVATARS[1];
+    }, []);
 
     return (
         <div className="flex w-full h-full justify-between">
@@ -269,7 +299,7 @@ export default function Chat({
                  bg-[#00000033] backdrop-blur-lg border border-white/20 rounded-xl">
                     <div className="flex gap-4 items-end">
                         <div className="w-10 h-10 rounded-lg overflow-hidden">
-                            <Image className="object-cover" src={AVATAR} alt="avatar" width={100} height={100} />
+                            <Image className="object-cover w-full h-full" src={partnerAvatar} alt="avatar" width={100} height={100} />
                         </div>
                         <div className="">
                             <h2 className="font-text" style={{ fontSize: partnerTyping ? "1.1em" : "1.3em" }}>{partner} </h2>
@@ -342,7 +372,7 @@ export default function Chat({
 
                 <div className="h-dvh w-full overflow-y-scroll" style={{ scrollbarWidth: "thin" }}>
                     <div className="w-full max-w-[800px] m-auto">
-                        <ChatDisplay chatBottom={chatBottom} chatHeightOffset={chatHeightOffset} messages={messages} partner={partner} readIndex={readIndex} replyTo={replyTo} />
+                        <ChatDisplay myAvatar={myAvatar} partnerAvatar={partnerAvatar} chatBottom={chatBottom} chatHeightOffset={chatHeightOffset} messages={messages} partner={partner} readIndex={readIndex} replyTo={replyTo} />
                     </div>
                 </div>
 

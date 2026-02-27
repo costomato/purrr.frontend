@@ -1,4 +1,5 @@
 import ExitIcon from "@/assets/icons/exit";
+import ExpandMoreIcon from "@/assets/icons/expand_more";
 import RefreshIcon from "@/assets/icons/refresh";
 import VideoIcon from "@/assets/icons/video";
 import AudioIcon from "@/assets/icons/audio";
@@ -281,14 +282,11 @@ export default function Chat({
     }, [localStream, audioTrackEnabled])
 
     const [videoFlipped, setVideoFlipped] = useState<boolean>(true);
+    const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
+
     const partnerAvatar = useMemo(() => {
         if (typeof window !== "undefined") return AVATARS[Math.floor(Math.random() * AVATARS.length)];
         return AVATARS[0];
-    }, []);
-
-    const myAvatar = useMemo(() => {
-        if (typeof window !== "undefined") return AVATARS[Math.floor(Math.random() * AVATARS.length)];
-        return AVATARS[1];
     }, []);
 
     return (
@@ -306,10 +304,27 @@ export default function Chat({
                             {partnerTyping && <small className="font-text block leading-3 text-[0.7em]">Typing... </small>}
                         </div>
                     </div>
-                    <div className="flex gap-2">
-                        <button className="relative" onClick={onVideoCallStart}><VideoIcon /> {connected && <div className="w-2 h-2 absolute -top-1 -right-1 bg-green-400 rounded-full"></div>}</button>
-                        <button onClick={onRefresh}><RefreshIcon /></button>
-                        <button onClick={onStop}><ExitIcon /></button>
+                    <div className="flex gap-3 relative">
+                        <button className="relative border border-white/20 p-2 rounded-xl text-white hover:bg-white/10 transition-colors flex items-center justify-center" onClick={onVideoCallStart}>
+                            <VideoIcon width="24" />
+                            {connected && <div className="w-2 h-2 absolute -top-1 -right-1 bg-green-400 rounded-full"></div>}
+                        </button>
+                        <button className="relative border border-white/20 px-3 py-2 rounded-xl text-white hover:bg-white/10 transition-colors flex items-center gap-1" onClick={() => setDropdownOpen(!dropdownOpen)}>
+                            <ExitIcon width="24" />
+                            <ExpandMoreIcon width="24" />
+                        </button>
+                        {dropdownOpen && (
+                            <div className="absolute font-text top-[140%] right-0 w-35 bg-[#121212] backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl flex flex-col overflow-hidden z-50">
+                                <button className="flex items-center gap-2 px-4 py-3 text-white hover:bg-white/10 transition-colors text-left text-sm" onClick={() => { setDropdownOpen(false); onRefresh(); }}>
+                                    <RefreshIcon width="20" />
+                                    <span>Refresh</span>
+                                </button>
+                                <button className="flex items-center gap-2 px-4 py-3 text-red-500 hover:bg-white/10 transition-colors text-left text-sm" onClick={() => { setDropdownOpen(false); onStop(); }}>
+                                    <ExitIcon width="20" />
+                                    <span>Exit</span>
+                                </button>
+                            </div>
+                        )}
                     </div>
                     {videoIncoming && <div className="absolute bg-background -bottom-3/4 right-5 rounded-lg border-2 border-white p-2 font-text flex gap-2">
                         <div className="">Video Incoming</div>
@@ -372,7 +387,7 @@ export default function Chat({
 
                 <div className="h-dvh w-full overflow-y-scroll" style={{ scrollbarWidth: "thin" }}>
                     <div className="w-full max-w-[800px] m-auto">
-                        <ChatDisplay myAvatar={myAvatar} partnerAvatar={partnerAvatar} chatBottom={chatBottom} chatHeightOffset={chatHeightOffset} messages={messages} partner={partner} readIndex={readIndex} replyTo={replyTo} />
+                        <ChatDisplay partnerAvatar={partnerAvatar} chatBottom={chatBottom} chatHeightOffset={chatHeightOffset} messages={messages} partner={partner} readIndex={readIndex} replyTo={replyTo} />
                     </div>
                 </div>
 

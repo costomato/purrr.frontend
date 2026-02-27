@@ -11,11 +11,10 @@ type ChatDisplayProps = {
     partner: string;
     readIndex: number | null;
     chatBottom: RefObject<HTMLDivElement>;
-    myAvatar: string;
     partnerAvatar: string;
 }
 
-export function ChatDisplay({ chatHeightOffset, messages, replyTo, partner, readIndex, chatBottom, myAvatar, partnerAvatar }: ChatDisplayProps) {
+export function ChatDisplay({ chatHeightOffset, messages, replyTo, partner, readIndex, chatBottom, partnerAvatar }: ChatDisplayProps) {
     return (
         <div className="flex flex-col justify-end max-w-full min-h-full pt-[5em]" style={{
             paddingBottom: chatHeightOffset + "px",
@@ -36,7 +35,7 @@ export function ChatDisplay({ chatHeightOffset, messages, replyTo, partner, read
                     <div key={i} className={`group flex w-full ${isMe ? "justify-end" : "justify-start"} mb-2 px-4 ${showHeader ? "mt-4" : ""}`}>
                         {/* Avatar for partner */}
                         {!isMe && (
-                            <div className="w-12 rounded-[5px] overflow-hidden m-2 shrink-0 flex-none mt-1">
+                            <div className="w-12 h-full rounded-[5px] overflow-hidden m-2 shrink-0 flex-none mt-1">
                                 {showHeader ? (
                                     <Image className="object-cover w-full h-12 " src={partnerAvatar} alt="avatar" width={50} height={50} />
                                 ) : (

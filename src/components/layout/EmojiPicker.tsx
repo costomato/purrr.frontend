@@ -11,7 +11,7 @@ import { useState } from "react"
 import data from "unicode-emoji-json/data-by-group.json"
 
 const grouptoicon: {
-    [key: string]: React.FC<{width: string}>
+    [key: string]: React.FC<{ width?: string, fill?: string }>
 } = {
     "smileys_emotion": SmileyEmotionIcon,
     "people_body": PeopleBodyIcon,
@@ -33,23 +33,27 @@ export default function EmojiPicker({ onChoose }: EmojiPickerProps) {
     const [group, setGroup] = useState<number>(0);
 
     return (
-        <div className="bg-background border-2 border-foreground rounded-xl w-full h-full flex flex-col">
-            <div className="flex gap-2 w-full overflow-auto">
+        <div className="bg-[#121212] backdrop-blur-xl border border-white/10 rounded-[20px] shadow-2xl w-full h-full flex flex-col overflow-hidden">
+            <div className="flex gap-1 w-full overflow-x-auto p-2 pb-1 flex-shrink-0 border-b border-white/5 scrollbar-hide">
                 {data.map((entry, i) => {
                     const Elem = grouptoicon[entry.slug];
                     return (
-                        <div key={i} onClick={() => setGroup(i)} className="p-2 cursor-pointer">
-                            <Elem width="25"/>
+                        <div key={i} onClick={() => setGroup(i)}
+                            className={`p-2 cursor-pointer rounded-lg transition-colors flex-shrink-0 flex items-center justify-center
+                            ${group === i ? "bg-white/10 text-white" : "text-gray-400 hover:text-white hover:bg-white/5"}`}>
+                            <Elem width="22" />
                         </div>
                     )
                 })}
             </div>
-            <div className="flex flex-wrap h-full justify-between overflow-auto">
-                {data[group].emojis.map((emoji, i) => {
-                    return (
-                        <div onClick={() => onChoose(emoji.emoji)} key={i} className="text-3xl p-1 cursor-pointer">{emoji.emoji}</div>
-                    )
-                })}
+            <div className="flex-1 overflow-y-auto" style={{ scrollbarWidth: "thin" }}>
+                <div className="grid grid-cols-[repeat(auto-fill,minmax(40px,1fr))] p-3 gap-1 content-start">
+                    {data[group].emojis.map((emoji, i) => {
+                        return (
+                            <div onClick={() => onChoose(emoji.emoji)} key={i} className="text-2xl p-2 cursor-pointer rounded-lg hover:bg-white/10 transition-colors flex items-center justify-center">{emoji.emoji}</div>
+                        )
+                    })}
+                </div>
             </div>
         </div>
     )

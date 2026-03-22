@@ -35,7 +35,7 @@ export default function Home() {
         </div>
 
         <div className="absolute top-[30dvh] md:top-[40dvh] w-full">
-          <div className="max-w-[90vw] m-auto flex flex-col items-center text-center font-text">
+          <div className="max-w-[90vw] m-auto flex flex-col items-center text-center font-text text-white">
             <h2 className="w-full text-[1.5em] md:text-[2.5em] leading-8">
               <StaggerredSpans delay={0.2}>
                 Connect, Chat, and Explore
@@ -76,17 +76,17 @@ export default function Home() {
         <motion.ul
           initial={{ opacity: 0, filter: "blur(16px)" }} whileInView={{ opacity: 1, filter: "blur(0)"}} transition={{delay: 1.5, duration: 0.2 }} viewport={{ once: true }}
           className="max-w-[90vw] w-[1080px] grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-4 my-8 font-text">
-          <li className="min-h-[15em] max-w-[25em] w-full bg-[#00161F] rounded-md py-4 px-8">
+          <li className="min-h-[15em] max-w-[25em] w-full bg-white dark:bg-[#00161F] shadow-sm dark:shadow-none rounded-md py-4 px-8">
             <div className="text-[2.5em] lg:text-[3em] text-accent font-black">01</div>
             <h5 className="text-[1.8em] lg:text-[2.1em] font-bold">Choose a name</h5>
             <p className="text-[1em] lg:text-[1.1em]">Simply choose any name to identify yourself on purrr.chat. No need to login or signup.</p>
           </li>
-          <li className="min-h-[15em] max-w-[25em] w-full bg-[#00161F] rounded-md py-4 px-8 justify-self-end">
+          <li className="min-h-[15em] max-w-[25em] w-full bg-white dark:bg-[#00161F] shadow-sm dark:shadow-none rounded-md py-4 px-8 justify-self-end">
             <div className="text-[2.5em] lg:text-[3em] text-accent font-black">02</div>
             <h5 className="text-[1.8em] lg:text-[2.1em] font-bold">Find someone</h5>
             <p className="text-[1em] lg:text-[1.1em]">Randomly connect with someone to chat with in one click and leave or reconnect also in one click.</p>
           </li>
-          <li className="min-h-[15em] max-w-[25em] w-full bg-[#00161F] rounded-md py-4 px-8">
+          <li className="min-h-[15em] max-w-[25em] w-full bg-white dark:bg-[#00161F] shadow-sm dark:shadow-none rounded-md py-4 px-8">
             <div className="text-[2.5em] lg:text-[3em] text-accent font-black">03</div>
             <h5 className="text-[1.8em] lg:text-[2.1em] font-bold">Total Privacy</h5>
             <p className="text-[1em] lg:text-[1.1em]">Once you leave the chat, all messages are gone. We {"don't"} keep any records.</p>

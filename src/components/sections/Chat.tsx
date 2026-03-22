@@ -299,7 +299,7 @@ export default function Chat({
                         <div className="w-10 h-10 rounded-lg overflow-hidden">
                             <Image className="object-cover w-full h-full" src={partnerAvatar} alt="avatar" width={100} height={100} />
                         </div>
-                        <div className="">
+                        <div className="text-white">
                             <h2 className="font-text" style={{ fontSize: partnerTyping ? "1.1em" : "1.3em" }}>{partner} </h2>
                             {partnerTyping && <small className="font-text block leading-3 text-[0.7em]">Typing... </small>}
                         </div>
@@ -326,7 +326,7 @@ export default function Chat({
                             </div>
                         )}
                     </div>
-                    {videoIncoming && <div className="absolute bg-background -bottom-3/4 right-5 rounded-lg border-2 border-white p-2 font-text flex gap-2">
+                    {videoIncoming && <div className="absolute bg-background -bottom-3/4 right-5 rounded-lg border-2 border-black/20 dark:border-white p-2 font-text flex gap-2">
                         <div className="">Video Incoming</div>
                         <button onClick={acceptIncomingVideoCall} className="text-sm bg-green-600 px-2 rounded-lg">Accept</button>
                         <button onClick={refuseIncomingVideoCall} className="text-sm bg-red-400 px-2 rounded-lg">Refuse</button>

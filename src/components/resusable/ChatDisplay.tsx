@@ -46,7 +46,7 @@ export function ChatDisplay({ chatHeightOffset, messages, replyTo, partner, read
 
                         <div className={`flex flex-col ${isMe ? "items-end" : "items-start"} max-w-[70%]`}>
                             {showHeader && (
-                                <h5 className={`text-[0.75em] text-gray-300 mb-1 ${isMe ? "mr-1" : "ml-1"}`}>{message.from}</h5>
+                                <h5 className={`text-[0.75em] text-gray-600 dark:text-gray-300 mb-1 ${isMe ? "mr-1" : "ml-1"}`}>{message.from}</h5>
                             )}
 
                             {message.reply !== null && (
@@ -55,8 +55,8 @@ export function ChatDisplay({ chatHeightOffset, messages, replyTo, partner, read
                                     borderRightWidth: isMe ? "2px" : "0",
                                     borderLeftWidth: isMe ? "0" : "2px",
                                 }}>
-                                    <h3 className="text-[0.7em] text-gray-400">Replying to {messages[message.reply].from}</h3>
-                                    <p className="text-[0.8em] text-gray-300">{messages[message.reply].image && "(Attachment) "}{truncate(messages[message.reply].body)}</p>
+                                    <h3 className="text-[0.7em] text-gray-500 dark:text-gray-400">Replying to {messages[message.reply].from}</h3>
+                                    <p className="text-[0.8em] text-gray-600 dark:text-gray-300">{messages[message.reply].image && "(Attachment) "}{truncate(messages[message.reply].body)}</p>
                                 </div>
                             )}
 
@@ -72,14 +72,14 @@ export function ChatDisplay({ chatHeightOffset, messages, replyTo, partner, read
                                     )}
                                 </div>
                                 <div className="hidden group-hover:flex items-center gap-2 mb-1">
-                                    <button onClick={() => replyTo(i)} className="text-gray-400 hover:text-white transition-colors">
+                                    <button onClick={() => replyTo(i)} className="text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white transition-colors">
                                         <ReplyIcon width="16" />
                                     </button>
                                 </div>
                             </div>
 
                             {i === readIndex && (isMe ?
-                                <p className="text-[0.65em] text-gray-400 mt-1">Read by {partner}</p> :
+                                <p className="text-[0.65em] text-gray-500 dark:text-gray-400 mt-1">Read by {partner}</p> :
                                 <div className="h-[1em]" />)}
                         </div>
                     </div>
